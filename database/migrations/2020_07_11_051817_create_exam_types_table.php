@@ -17,6 +17,7 @@ class CreateExamTypesTable extends Migration
             $table->id();
             $table->integer('vendor_id');
             $table->string('name');
+            $table->string('amount')->nullable();
             $table->timestamps();
         });
     }

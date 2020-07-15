@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Medic extends Model
-{
+{  protected $guarded = [
+        
+];
     public function exams(){
        return $this->hasMany('App\Exam');
     }
@@ -17,4 +19,13 @@ class Medic extends Model
     public function reviews(){
         return $this->hasMany('App\ReviewMedic');
     }
+
+    public function user(){
+      return $this->belongsTo('App\User');
+  }
+
+  public function offer(){
+    return $this->hasMany('App\SendRequest');
+}
+
 }

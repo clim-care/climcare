@@ -15,9 +15,10 @@ class CreateSendRequestsTable extends Migration
     {
         Schema::create('send_requests', function (Blueprint $table) {
             $table->id();
-            $table->integer('vendor_id')->unsigned();
-            $table->integer('medic_id')->unsigned();
+            $table->integer('vendor_id')->unsigned(); // sender
+            $table->integer('medic_id')->unsigned();  // receiver
             $table->string('status');
+            $table->string('description')->nullable();
             $table->timestamp('date_responded')->nullable();  
             $table->timestamps();
         });

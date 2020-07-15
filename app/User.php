@@ -39,4 +39,8 @@ class User extends Authenticatable
     public function vendor(){
         return $this->hasOne('App\Vendor');
     }
+
+    public function medic(){
+        return $this->hasOne('App\Medic');
+    }
 }

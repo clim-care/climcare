@@ -27,7 +27,7 @@ class VendorController extends Controller
         'street_address' => $request['street_address'],
         'country' => $request['country'],
         'phone' => $request['phone'],
-       // 'email' => $request['email'],
+        'description' => $request['description'],
         'user_id' => $user_id,
       ]);  
     }
@@ -48,6 +48,7 @@ class VendorController extends Controller
           'name' => 'required|min:2',      
           'vendor_name' => 'required|min:3',
           'mobile_no' => 'required',
+          'description' => 'required',
         ]);
 
      if($validation->fails()){
@@ -63,19 +64,7 @@ class VendorController extends Controller
         'message' => 'Vendor created successfully'
 
             ]);
-        
-        /*if($result){
-            return response()->json([ 
-                'status' =>'success',
-                'message' => 'Vendor created successfully'
-
-                    ]);
-        }else{
-            return response()->json([ 
-                'status' =>'error',
-                'message' => 'Vendor not created successfully. Please try again'
-            ]);
-        }*/
+   
 
     }
 
