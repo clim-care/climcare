@@ -10,11 +10,13 @@ class SendRequest extends Model
         
     ];
 
+    // 
     public function medic(){
-        $this->belongsTo('App\Medic', 'medic_id');
+      return  $this->belongsTo('App\Medic');
     }
 
+    //
     public function vendor(){
-        $this->belongsTo('App\Vendor', 'vendor_id');
+      return  $this->belongsTo('App\Vendor');
     }
 }

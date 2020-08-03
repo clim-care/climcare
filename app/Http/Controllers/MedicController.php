@@ -75,9 +75,9 @@ class MedicController extends Controller
      */
     public static function get($id = null){
       if(!empty($id)){
-      return $data = Medic::where('id', $id)->with(['user'])->first();
+      return $data = Medic::where('id', $id)->with(['user', 'exams', 'reviews', 'offers'])->first();
     }elseif(empty($id)){
-        return $data = Medic::where('id', '!=', null)->with(['user'])->paginate(20);
+        return $data = Medic::where('id', '!=', null)->with(['user', 'exams', 'reviews', 'offers'])->paginate(20);
       }else{
         return response()->json([
           'status' => 'error',

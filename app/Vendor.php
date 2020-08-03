@@ -38,7 +38,11 @@ class Vendor extends Model
        return $this->belongsTo('App\User');
     }
 
-    public function offer(){
-      return $this->hasMany('App\SendRequest');
+    public function sentRequest(){
+      return $this->hasMany('App\SendRequest', 'vendor_id');
   }
+
+  public function vendor_medics(){
+   return $this->hasMany('App\VendorMedic', 'vendor_id');
+}
 }

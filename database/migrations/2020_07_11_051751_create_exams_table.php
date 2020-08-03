@@ -20,6 +20,7 @@ class CreateExamsTable extends Migration
             $table->integer('exam_type_id')->unsigned();
             $table->timestamp('date_posted');
             $table->timestamp('date_examined')->nullable();
+            $table->string('examinar_comment')->nullable();
             $table->timestamps();
         });
     }

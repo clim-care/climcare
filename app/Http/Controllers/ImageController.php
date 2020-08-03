@@ -56,13 +56,13 @@ class ImageController extends Controller
             $file = $image;
             $filename = rand().'-'.$file->getClientOriginalName().'.'.$file->getClientOriginalExtension();
             $path = public_path('images/productType/'.$filename);
-            $avatar = Image::make($file->getRealPath())->resize(120, 100)->save($path);
-            // return $filename;
-            $image = new Image;
+            $avatar = Image::make($file->getRealPath())->resize(400, 500)->save($path);
+            return $filename;
+           /* $image = new Image;
             $image->name = $filename;
             $image->imegeable_id = $id;
             $image->imageable_type = 'App\ProductType';
-            $image->save();
+            $image->save();*/
             }
         }
         else{

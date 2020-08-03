@@ -15,4 +15,8 @@ class ExamType extends Model
     public function prices(){
         return $this->hasMany('App\ExamTypePrice');
     }
+
+    public function exam(){
+        return $this->belongsTo('App\Exam');
+    }
 }

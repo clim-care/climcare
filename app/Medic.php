@@ -24,8 +24,12 @@ class Medic extends Model
       return $this->belongsTo('App\User');
   }
 
-  public function offer(){
+  public function offers(){
     return $this->hasMany('App\SendRequest');
+}
+
+public function medicContracts(){
+  return $this->hasMany('App\VendorMedic', 'medic_id');
 }
 
 }

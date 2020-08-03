@@ -42,13 +42,32 @@ Route::post('exam-type/update', 'ExamTypeController@update');
 Route::get('exam-type/get/{id?}', 'ExamTypeController@get');
 Route::get('exam-type/delete/{id}', 'ExamTypeController@delete');
 
-// offer
+// offers
 Route::post('offer/create', 'SendRequestController@create');
 Route::post('offer/update', 'SendRequestController@update');
 Route::get('offer/get/{id?}', 'SendRequestController@get');
 Route::get('offer/delete/{id}', 'SendRequestController@delete');
-Route::get('offer/respond/{id}/{response}', 'SendRequestController@respond');
-Route::get('offer/pending/{id}', 'SendRequestController@getPendingOfferBYMedic');
+Route::get('offer/accept/{id}', 'SendRequestController@acceptOffer');
+Route::get('offer/decline/{id}', 'SendRequestController@declineOffer');
+Route::get('offer/pending/{medic_id}', 'SendRequestController@getPendingOfferBYMedic');
+
+// Exam
+Route::post('exam/create', 'ExamController@create');
+Route::post('exam/update', 'ExamController@update');
+Route::get('exam/get/{id?}', 'ExamController@get');
+Route::get('exam/delete/{id}', 'ExamController@delete');
+Route::post('examined', 'ExamController@examined');
+
+// Setting
+Route::post('setting/create', 'SettingController@create');
+Route::post('setting/update', 'SettingController@update');
+Route::get('setting/get/{id?}', 'SettingController@get');
+Route::get('setting/delete/{id}', 'SettingController@delete');
+
+// vendor medic
+Route::get('vendor-contracts/{$vendor_id}', 'VendorMedicController@vendorContracts');
+Route::get('medic-contracts/{medic_id}', 'VendorMedicController@medicContracts');
+Route::get('terminate-contract/{$id}', 'VendorMedicController@terminateContract');
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
  //   return $request->user();

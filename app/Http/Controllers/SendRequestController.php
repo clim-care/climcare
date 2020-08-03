@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\SendRequest;
-use App\Medic;
-use App\Vendor;
+ use App\Medic;
+ use App\Vendor;
 use Carbon\Carbon;
+use App\Http\Controllers\VendorMedicController;
+use DB, Auth, Validator;
 
 class SendRequestController extends Controller
 {
@@ -59,9 +61,9 @@ class SendRequestController extends Controller
      */
     public static function get($id = null, $status = null){
         if(!empty($id) && empty($status)){
-    		return $data = SendRequest::where('id', $id)->with(['vendor'])->first();
+    		return $data = SendRequest::where('id', $id)->with(['vendor', 'medic'])->first();
     	}elseif(empty($id) && empty($status)){
-    		  return $data = SendRequest::where('id', '!=', null)->with(['medic', 'vendor'])->paginate(20);
+    		  return $data = SendRequest::where('id', '!=', null)->with(['vendor', 'medic'])->paginate(20);
             }elseif(empty($id) && !empty($status)){
                 return $data = SendRequest::where('status', $status)->with(['medic', 'vendor'])->get();
             }else{
@@ -81,18 +83,26 @@ class SendRequestController extends Controller
      * to accept an offer or decline
      * 
      */
-    public static function respond($id, $response){
-       $requestResponse = SendRequest::where('id', $id)->first();
-       $requestResponse->status = $response;
+    public static function acceptOffer($id){
+        try{
+        DB::transaction(function() use ($id){
+       $requestResponse = SendRequest::where('id', $id)->with(['vendor', 'medic'])->first();
+       $requestResponse->status = 'accepted';
        $requestResponse->date_responded = Carbon::now();
        $result = $requestResponse->save();
-       if($result){
+       $data = [
+           'vendor_id' => $requestResponse->vendor_id,
+           'medic_id' => $requestResponse->medic_id,
+           'status' => 'active',
+       ];
+       VendorMedicController::store($data);
+          });
         return response()->json([
             'status' => 'success',
-            'message' => 'Offer '.$response,
+            'message' => 'Offer accepted',
             'data' => $requestResponse,
         ]);
-       }else{
+       }catch(Exception $e){
         return response()->json([
             'status' => 'error',
             'message' => 'Something went wrong request could not be processed',
@@ -100,12 +110,40 @@ class SendRequestController extends Controller
        }
     }
 
+
+    /**
+     * Declines medic requset/offer 
+     * 
+     * a request to whether
+     * 
+     * to accept an offer or decline
+     * 
+     */
+    public static function declineOffer($id){
+        $requestResponse = SendRequest::where('id', $id)->with(['vendor', 'medic'])->first();
+        $requestResponse->status = 'declined';
+        $requestResponse->date_responded = Carbon::now();
+        $result = $requestResponse->save();
+        if($result){
+         return response()->json([
+             'status' => 'success',
+             'message' => 'Offer declined',
+             'data' => $requestResponse,
+         ]);
+        }else{
+         return response()->json([
+             'status' => 'error',
+             'message' => 'Something went wrong request could not be processed',
+         ]);
+        }
+     }
+
      /**
+     * deletes a 
      * 
+     * @var $id
      * 
-     * 
-     * 
-     * 
+     * @public 
      */
     public static function delete($id){
         $delete = SendRequest::where('id', $id)->delete();
@@ -114,7 +152,7 @@ class SendRequestController extends Controller
                 'status' =>'success',
                 'message' => 'Offer deleted successfully'
                
-                                     ]);
+                    ]);
         }else{
             return response()->json([ 
                 'status' =>'error',
@@ -162,7 +200,7 @@ class SendRequestController extends Controller
  * get pending request
  * 
  * by a medic
- * 
+ * @param $medic_id
  */
 public static function getPendingOfferBYMedic($medic_id){
     return SendRequest::where('medic_id', $medic_id)->where('status', 'pending')->with(['vendor'])->get();
